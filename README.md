@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="/assets/icon.png" alt="Icon" width="100" height="100" </img>
+<img src="https://user-images.githubusercontent.com/16636012/159544500-b26c444c-afe3-4663-8a91-dc5d7944f8a3.png" alt="Icon" width="100" height="100" </img>
 <br>YouTube Spammer Purge GUI<br>
 </h1>
 
