@@ -1,0 +1,55 @@
+/* Theme style (colors & sizes) */
+@import "./theme/theme-default";
+
+/* Core Libs & Lib configs */
+@import "../../node_modules/bulma/sass/utilities/functions.sass";
+@import "../../node_modules/bulma/sass/utilities/initial-variables.sass";
+@import "../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../node_modules/bulma/bulma.sass";
+@import "../../node_modules/buefy/src/scss/utils/all";
+
+/* Mixins */
+@import "./theme/mixins";
+
+/* App */
+@import "./theme/app";
+
+/* Theme components */
+@import "./theme/nav-bar";
+@import "./theme/aside";
+@import "./theme/title-bar";
+@import "./theme/hero-bar";
+@import "./theme/card";
+@import "./theme/table";
+@import "./theme/tiles";
+@import "./theme/form";
+@import "./theme/main-section";
+@import "./theme/modal";
+@import "./theme/footer";
+@import "./theme/misc";
+
+/* Dark theme style (colors & sizes) */
+@import "./dark/all";
+
+/* Animate.css custom build (just selected animations to minimize bundle size) */
+@import "../css/animate.css";
+
+body {
+    overflow: hidden;
+}
+
+.firebase-emulator-warning {
+    display: none;
+}
+
+.seperator-bottom {
+    border-bottom: 1px solid rgba(24, 28, 33, 0.06);
+}
+
+.menu-list a {
+    padding: 0.5rem 0.5rem;
+}
+
+.media {
+    align-items: center !important;
+}

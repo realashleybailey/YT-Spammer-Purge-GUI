@@ -1,0 +1,14 @@
+$titlebar-color-dark: $grey-light !default;
+$titlebar-active-color-dark: $white !default;
+
+section.section.is-title-bar {
+  ul {
+    li {
+      color: $titlebar-color-dark;
+
+      &:last-child {
+        color: $titlebar-active-color-dark;
+      }
+    }
+  }
+}
