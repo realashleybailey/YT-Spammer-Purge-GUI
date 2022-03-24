@@ -9,6 +9,10 @@ section.section.is-title-bar {
       font-size: $default-padding;
       color: $title-bar-color;
 
+      @include touch {
+        padding: 0 10% 0 0;
+      }
+
       &:after {
         display: inline-block;
         content: '/';

@@ -1,10 +1,10 @@
 <template>
   <div class="homeview">
     <!-- Title Stack -->
-    <TitleBar :title-stack="['YT Spammer Purge']">
+    <TitleBar :title-stack="['YT Spammer Purge']" :centered="true">
       <div class="buttons is-hidden-desktop">
-        <b-button>Login</b-button>
-        <b-button>Signup</b-button>
+        <b-button tag="router-link" to="/login">Login</b-button>
+        <b-button tag="router-link" to="/register">Signup</b-button>
       </div>
       <div class="buttons is-hidden-touch">
         <b-button tag="router-link" to="/doc">Read More</b-button>

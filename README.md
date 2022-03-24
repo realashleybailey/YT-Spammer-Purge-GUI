@@ -1,7 +1,9 @@
-<h1 align="center">
-<img src="https://user-images.githubusercontent.com/16636012/159544500-b26c444c-afe3-4663-8a91-dc5d7944f8a3.png" alt="Icon" width="100" height="100" </img>
-<br>YouTube Spammer Purge GUI<br>
-</h1>
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/16636012/159981460-dd83ce51-a221-4052-95ab-552e4bb20614.png" alt="Icon" width="100" height="100" </img><br>
+  <span><strong>YT Spammer Purge</strong> <br> The GUI version of YT Spammer Purge</span>
+</div>
+
+<br>
 
 <div align="center">
   <a href="https://github.com/realashleybailey/YT-Spammer-Purge-GUI/issues">
