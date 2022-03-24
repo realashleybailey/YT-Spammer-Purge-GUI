@@ -19,7 +19,7 @@ module.exports = {
     quotes: "off",
     "@typescript-eslint/quotes": ["warn"],
     "space-before-function-paren": "off",
-    "@typescript-eslint/space-before-function-paren": ["warn"]
+    "@typescript-eslint/space-before-function-paren": ["off"]
     // "prettier/prettier": ["error", prettierOptions]
   },
   overrides: [
