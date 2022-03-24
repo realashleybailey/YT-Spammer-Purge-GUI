@@ -13,4 +13,7 @@
   <a href="https://github.com/realashleybailey/YT-Spammer-Purge-GUI/releases">
     <img src="https://img.shields.io/github/v/release/realashleybailey/YT-Spammer-Purge-GUI?include_prereleases&label=Latest%20Release" />
   </a>
+  <a href="https://github.com/realashleybailey/YT-Spammer-Purge-GUI/actions/workflows/firebase-hosting-merge.yml">
+    <img src="https://github.com/realashleybailey/YT-Spammer-Purge-GUI/actions/workflows/firebase-hosting-merge.yml/badge.svg" />
+  </a>
 </div>
