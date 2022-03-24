@@ -1,6 +1,7 @@
 <h1 align="center">
-<img src="https://user-images.githubusercontent.com/16636012/159544500-b26c444c-afe3-4663-8a91-dc5d7944f8a3.png" alt="Icon" width="100" height="100" </img>
-<br>YouTube Spammer Purge GUI<br>
+<img src="https://user-images.githubusercontent.com/16636012/159981460-dd83ce51-a221-4052-95ab-552e4bb20614.png" alt="Icon" width="100" height="100" </img>
+<br>YT Spammer Purge<br>
+<span style="font-size: 1rem; color: grey">The GUI version of YT Spammer Purge<span>
 </h1>
 
 <div align="center">
