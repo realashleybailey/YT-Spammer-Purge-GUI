@@ -2,7 +2,9 @@
 <template>
   <div id="app">
     <NavBar />
-    <router-view />
+    <transition name="fade">
+      <router-view />
+    </transition>
     <FooterBar />
   </div>
 </template>
@@ -16,6 +18,13 @@ export default {
   components: {
     FooterBar,
     NavBar
+  },
+  async mounted() {
+    console.log(this.$store.state.user)
+    console.log(this.$store.state.googletoken)
+
+    // Sync Dark Mode
+    this.$store.dispatch("syncDarkMode")
   }
 }
 </script>

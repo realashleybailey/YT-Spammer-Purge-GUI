@@ -11,7 +11,7 @@
     </template>
 
     <template #end>
-      <b-navbar-item tag="div">
+      <b-navbar-item v-if="!isLoggedIn" tag="div">
         <div class="buttons">
           <a class="button is-primary">
             <strong>Sign up</strong>
@@ -22,3 +22,16 @@
     </template>
   </b-navbar>
 </template>
+
+<script lang="ts">
+import Vue from "vue"
+
+export default Vue.extend({
+  name: "NavBar",
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn
+    }
+  }
+})
+</script>

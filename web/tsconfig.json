@@ -10,13 +10,20 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
       "webpack-env",
       "mocha",
-      "chai"
+      "chai",
+      "jest",
+      "lodash",
+      "gapi",
+      "gapi.auth2",
+      "gapi.client.youtube",
+      "gapi.client.youtubeanalytics"
     ],
     "paths": {
       "@/*": [

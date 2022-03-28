@@ -1,6 +1,6 @@
 <template>
   <section class="section is-title-bar">
-    <div class="level">
+    <div :class="isMobile ? 'is-mobile level' : 'level'">
       <div class="level-left">
         <div class="level-item" :style="!centered ? 'justify-content: flex-start' : ''">
           <ul>
@@ -10,7 +10,7 @@
           </ul>
         </div>
       </div>
-      <div class="level-right">
+      <div v-if="!hiddenRight" class="level-right">
         <div class="level-item">
           <slot></slot>
         </div>
@@ -29,6 +29,14 @@ export default Vue.extend({
       default: () => []
     },
     centered: {
+      type: Boolean,
+      default: false
+    },
+    hiddenRight: {
+      type: Boolean,
+      default: false
+    },
+    isMobile: {
       type: Boolean,
       default: false
     }

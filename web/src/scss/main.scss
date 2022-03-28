@@ -28,6 +28,8 @@
 @import "./theme/footer";
 @import "./theme/misc";
 
+@import "../../node_modules/buefy/src/scss/buefy";
+
 /* Dark theme style (colors & sizes) */
 @import "./dark/all";
 
@@ -52,4 +54,26 @@ body {
 
 .media {
     align-items: center !important;
+}
+
+.text-nooverflow {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.card {
+    .card-content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-content .level {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.has-widget-icon {
+    justify-content: flex-end;
 }

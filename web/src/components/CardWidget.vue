@@ -1,30 +1,31 @@
 <template>
-  <card-component>
+  <CardComponent styles="width: 100%">
     <div class="level is-mobile">
       <div class="level-item">
         <div class="is-widget-label">
           <h3 class="subtitle is-spaced">
             {{ label }}
           </h3>
-          <h1 class="title">
+          <h1 class="title" style="padding-top: 4px">
             <growing-number :value="number" :prefix="prefix" :suffix="suffix" />
           </h1>
         </div>
       </div>
       <div v-if="icon" class="level-item has-widget-icon">
         <div class="is-widget-icon">
-          <b-icon :icon="icon" size="is-large" :type="type" />
+          <b-icon :icon="icon" size="is-large" :pack="pack" :type="type" custom-size="fa-3x" />
         </div>
       </div>
     </div>
-  </card-component>
+  </CardComponent>
 </template>
 
 <script>
-import CardComponent from "@/components/CardComponent.vue"
-import GrowingNumber from "@/components/GrowingNumber.vue"
+import Vue from "vue"
+import CardComponent from "./CardComponent.vue"
+import GrowingNumber from "./GrowingNumber.vue"
 
-export default {
+export default Vue.extend({
   name: "CardWidget",
   components: { GrowingNumber, CardComponent },
   props: {
@@ -51,7 +52,11 @@ export default {
     type: {
       type: String,
       default: null
+    },
+    pack: {
+      type: String,
+      default: null
     }
   }
-}
+})
 </script>

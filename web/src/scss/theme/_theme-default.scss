@@ -188,3 +188,7 @@ $progress-bar-background-color: $grey-lighter;
 /* Icon: specifics */
 $icon-update-mark-size: $size-base * .5;
 $icon-update-mark-color: $yellow;
+
+/* Toast: Bulma override */
+$toast-border-radius: 0.25rem;
+$toast-opacity: 0.97;

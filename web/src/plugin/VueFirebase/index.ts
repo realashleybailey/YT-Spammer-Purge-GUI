@@ -4,7 +4,7 @@ import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
 import { connectAuthEmulator, getAuth } from "firebase/auth"
 
 interface PluginOptions {
-  app: FirebaseOptions,
+  app: FirebaseOptions
   emulator: boolean
 }
 
@@ -42,7 +42,7 @@ const VueFirebase = {
 
     // If in development mode, connect to the emulator
     if (process.env.NODE_ENV === "development" && options.emulator === true) {
-      console.log("Connecting to Auth Emulator")
+      // console.log("Connecting to Auth Emulator")
       connectAuthEmulator(auth, "http://localhost:9099")
     }
 
