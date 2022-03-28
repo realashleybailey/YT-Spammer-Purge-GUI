@@ -6,6 +6,7 @@ web/dist
 web/tests/e2e/videos/
 web/tests/e2e/screenshots/
 
+service.json
 
 # local env files
 .env.local

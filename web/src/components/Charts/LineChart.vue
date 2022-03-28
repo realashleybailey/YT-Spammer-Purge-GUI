@@ -1,7 +1,8 @@
 <script>
+import Vue from "vue"
 import { Line, mixins } from "vue-chartjs"
 
-export default {
+export default Vue.extend({
   name: "LineChart",
   extends: Line,
   mixins: [mixins.reactiveProp],
@@ -11,12 +12,12 @@ export default {
       default: undefined
     }
   },
-  data () {
+  data() {
     return {
       ctx: null
     }
   },
-  mounted () {
+  mounted() {
     this.$watch(
       "chartData",
       (newVal, oldVal) => {
@@ -27,5 +28,5 @@ export default {
       { immediate: true }
     )
   }
-}
+})
 </script>

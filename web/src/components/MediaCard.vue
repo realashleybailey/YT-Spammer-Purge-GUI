@@ -4,15 +4,15 @@
       <div class="card-content">
         <div class="media">
           <div class="media-left">
-            <img :src="image" class="image is-48x48" style="object-fit: contain" />
+            <img :src="image" rel="noreferrer" :class="'image is-48x48 '" :style="'object-fit: ' + (isFit ? 'fill' : 'contains') + '; ' + (rounded ? 'border-radius: 6px;' : '')" />
           </div>
-          <div class="media-content">
-            <p class="title is-5">{{ title }}</p>
-            <p class="subtitle is-6">{{ subtitle }}</p>
+          <div class="media-content" style="overflow: hidden">
+            <p :class="'title text-nooverflow is-' + titleSize">{{ title }}</p>
+            <p :class="'subtitle is-6 text-nooverflow is-' + subtitleSize">{{ subtitle }}</p>
           </div>
         </div>
       </div>
-      <div class="content">
+      <div v-if="hasDefaultSlot" class="card-content" style="padding-top: 0px">
         <slot></slot>
       </div>
     </component>
@@ -36,6 +36,14 @@ export default Vue.extend({
       type: String,
       default: ""
     },
+    titleSize: {
+      type: Number,
+      default: 5
+    },
+    subtitleSize: {
+      type: Number,
+      default: 6
+    },
     tag: {
       type: String,
       default: "div"
@@ -43,6 +51,20 @@ export default Vue.extend({
     to: {
       type: String,
       default: ""
+    },
+    rounded: {
+      type: Boolean,
+      default: false
+    },
+    isFit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    hasDefaultSlot() {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (this.$slots as any).default
     }
   }
 })

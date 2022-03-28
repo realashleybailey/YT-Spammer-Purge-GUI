@@ -19,7 +19,7 @@ import Tiles from "../../components/Tiles.vue"
 import MediaCard from "../../components/MediaCard.vue"
 
 export default Vue.extend({
-  name: "StackView",
+  name: "DocStackView",
   components: {
     Tiles,
     MediaCard

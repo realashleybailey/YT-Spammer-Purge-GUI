@@ -1,7 +1,8 @@
 <script>
+import Vue from "vue"
 import chunk from "lodash/chunk"
 
-export default {
+export default Vue.extend({
   name: "TilesComponent",
   props: {
     maxPerRow: {
@@ -15,9 +16,7 @@ export default {
         "div",
         { attrs: { class: "tile is-ancestor" } },
         elements.map((element) => {
-          return createElement("div", { attrs: { class: "tile is-parent" } }, [
-            element
-          ])
+          return createElement("div", { attrs: { class: "tile is-parent" } }, [element])
         })
       )
 
@@ -33,5 +32,5 @@ export default {
       )
     }
   }
-}
+})
 </script>

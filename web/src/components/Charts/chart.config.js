@@ -55,11 +55,11 @@ export const chartOptionsMain = {
   }
 }
 
-const randomChartData = n => {
+const randomChartData = (n) => {
   const data = []
 
   for (let i = 0; i < n; i++) {
-    data.push(Math.round(Math.random() * 200))
+    data.push(1 + i)
   }
 
   return data
@@ -68,12 +68,12 @@ const randomChartData = n => {
 const datasetObject = (color, points) => {
   return {
     fill: false,
-    borderColor: chartColors.default[color],
+    borderColor: "#8c67ef",
     borderWidth: 2,
     borderDash: [],
     borderDashOffset: 0.0,
-    pointBackgroundColor: chartColors.default[color],
-    pointBorderColor: "rgba(255,255,255,0)",
+    pointBackgroundColor: "#8c67ef",
+    pointBorderColor: "rgba(0,255,255,0)",
     pointHoverBackgroundColor: chartColors.default[color],
     pointBorderWidth: 20,
     pointHoverRadius: 4,
@@ -89,15 +89,16 @@ export const sampleChartData = (points = 9) => {
   const labels = []
 
   for (let i = 1; i <= points; i++) {
-    labels.push(`0${i}`)
+    // Current Time
+    const now = new Date()
+    // Future Time
+    const future = new Date(now.getTime() + i * 1000 * 60 * 60 * 24)
+
+    labels.push(future.toLocaleDateString())
   }
 
   return {
     labels,
-    datasets: [
-      datasetObject("primary", points),
-      datasetObject("info", points),
-      datasetObject("danger", points)
-    ]
+    datasets: [datasetObject("primary", points)]
   }
 }
