@@ -6,5 +6,20 @@ html.dark {
   @import "components/_all";
   @import "layout/_all";
 
+  .has-text-muted {
+    color: #ffffff63 !important;
+  }
+
+  section.section.is-title-bar {
+    border-bottom: 1px solid #0a0a0a;
+    // border-bottom: 1px solid rgb(255 255 255 / 7%);
+  }
+
+  @media screen and (max-width: 1023px) {
+    .navbar-menu {
+      box-shadow: 0 8px 16px rgb(0 0 0 / 10%);
+    }
+  }
+
   background-color: $body-background-color-dark;
 }

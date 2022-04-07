@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pcre-to-regexp": "^1.1.0"
+  }
+}

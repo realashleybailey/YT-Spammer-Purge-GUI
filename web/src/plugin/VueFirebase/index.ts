@@ -1,7 +1,7 @@
 import _Vue from "vue"
 import { FirebaseApp, FirebaseOptions, initializeApp } from "firebase/app"
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
-import { connectAuthEmulator, getAuth } from "firebase/auth"
+import { getAuth, RecaptchaVerifier } from "firebase/auth"
 
 interface PluginOptions {
   app: FirebaseOptions
@@ -20,6 +20,7 @@ const VueFirebase = {
     // Set firebase services
     VueFirebase.setupFirestore(Vue, firebaseApp, options)
     VueFirebase.setupAuth(Vue, firebaseApp, options)
+    VueFirebase.setupRecaptcha(Vue, firebaseApp)
   },
 
   setupFirestore: (Vue: typeof _Vue, app: FirebaseApp, options: PluginOptions) => {
@@ -43,11 +44,31 @@ const VueFirebase = {
     // If in development mode, connect to the emulator
     if (process.env.NODE_ENV === "development" && options.emulator === true) {
       // console.log("Connecting to Auth Emulator")
-      connectAuthEmulator(auth, "http://localhost:9099")
+      // connectAuthEmulator(auth, "http://localhost:9099")
     }
 
     // Register firestore
     Vue.prototype.$fireauth = auth
+  },
+
+  setupRecaptcha: (Vue: typeof _Vue, app: FirebaseApp) => {
+    // Initialize Firebase
+    const auth = getAuth(app)
+
+    // Initialize Recaptcha
+    const recaptcha = new RecaptchaVerifier(
+      "2fa-captcha",
+      {
+        size: "invisible",
+        callback: (response: never) => {
+          console.log("Response from reCAPTCHA:", response)
+        }
+      },
+      auth
+    )
+
+    // Register recaptcha
+    Vue.prototype.$recaptcha = recaptcha
   }
 }
 

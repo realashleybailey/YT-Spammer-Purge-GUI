@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :to="to" class="signin-with-google">
+  <component :is="tag" :to="to" :class="'signin-with-google ' + (isDark ? 'dark' : '')">
     <div class="google-logo">
       <svg viewBox="0 0 46 46" width="46" height="46" xmlns="http://www.w3.org/2000/svg">
         <g id="Google-Button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="matrix(1, 0, 0, 1, 0.000001, 0.000001)">
@@ -86,6 +86,16 @@
   }
 }
 
+.signin-with-google.dark {
+  background-color: #363636 !important;
+  color: #ffffff !important;
+}
+
+.signin-with-google:active.dark {
+  background-color: #2e2e2e !important;
+  color: #ffffff !important;
+}
+
 .signin-with-google:active {
   border-color: #4a4a4a;
   color: #363636;
@@ -93,6 +103,7 @@
 </style>
 
 <script lang="ts">
+import store from "@/store"
 import Vue from "vue"
 
 export default Vue.extend({
@@ -105,6 +116,11 @@ export default Vue.extend({
     to: {
       type: String,
       default: ""
+    }
+  },
+  computed: {
+    isDark() {
+      return store.getters.isDarkMode
     }
   }
 })

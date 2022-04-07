@@ -1,0 +1,9 @@
+{
+    "name": "ashley/php",
+    "autoload": {
+        "psr-4": {
+            "Ashley\\Php\\": "src/"
+        }
+    },
+    "require": {}
+}

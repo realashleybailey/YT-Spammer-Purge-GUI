@@ -77,3 +77,21 @@ body {
 .has-widget-icon {
     justify-content: flex-end;
 }
+
+@media screen and (max-width: 1279px) {
+    .notices .toast.is-bottom-right {
+        margin: 10px;
+    }
+}
+
+.has-text-muted {
+    color: #00000063
+}
+
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}

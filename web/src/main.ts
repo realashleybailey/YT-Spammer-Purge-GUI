@@ -19,6 +19,15 @@ const config = {
   messagingSenderId: "451656004495"
 }
 
+gapi.load("client", () => {
+  gapi.client.init({
+    apiKey: "AIzaSyABD1VkFV_gMVxhQGVNlME_yVv-djBZw4w",
+    clientId: "451656004495-nt01u5u1ep6e641qrto3gugna1e711u3.apps.googleusercontent.com",
+    discoveryDocs: ["https://youtube.googleapis.com/$discovery/rest?version=v3", "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2"],
+    scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/yt-analytics.readonly"
+  })
+})
+
 Vue.use(VueFirebase, { app: config, emulator: true })
 Vue.use(Buefy)
 
