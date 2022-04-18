@@ -36,6 +36,15 @@
       </template>
     </HeroComponent>
 
+    <section class="hero seperator-bottom">
+      <div class="hero-body front-body-hero">
+        <div class="container">
+          <div class="title">Advertisement</div>
+          <ins class="adsbygoogle" style="display: block" data-ad-format="fluid" data-ad-layout-key="-gc+3r+68-9q-29" data-ad-client="ca-pub-1145262094841658" data-ad-slot="3787967502" :data-adtest="testAds"></ins>
+        </div>
+      </div>
+    </section>
+
     <HeroComponent title="Github, Open Source" subtitle="This project is open source and free to use. You can find the source code on GitHub.">
       <template #subtitle-extra-bottom>
         <br />
@@ -61,6 +70,8 @@
 import GithubButton from "vue-github-button"
 import TitleBar from "../components/TitleBar.vue"
 import HeroComponent from "../components/HeroComponent.vue"
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-extra-semi */
 
 export default {
   name: "HomeView",
@@ -68,6 +79,18 @@ export default {
     GithubButton,
     TitleBar,
     HeroComponent
+  },
+  computed: {
+    testAds() {
+      return process.env.NODE_ENV === "development" ? "on" : "off"
+    }
+  },
+  mounted() {
+    try {
+      ;(adsbygoogle = window.adsbygoogle || []).push({})
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>

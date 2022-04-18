@@ -1,5 +1,5 @@
 <template>
-  <section class="section is-title-bar">
+  <section class="section is-title-bar" :style="!paddingBottom ? 'padding-bottom: 0px' : ''">
     <div :class="isMobile ? 'is-mobile level' : 'level'">
       <div class="level-left">
         <div class="level-item" :style="!centered ? 'justify-content: flex-start' : ''">
@@ -39,6 +39,10 @@ export default Vue.extend({
     isMobile: {
       type: Boolean,
       default: false
+    },
+    paddingBottom: {
+      type: Boolean,
+      default: true
     }
   }
 })

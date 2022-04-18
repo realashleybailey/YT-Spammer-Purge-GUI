@@ -36,6 +36,10 @@
 /* Animate.css custom build (just selected animations to minimize bundle size) */
 @import "../css/animate.css";
 
+@import '../css/vue-tour.css';
+
+@import './swipeCards';
+
 body {
     overflow: hidden;
 }
@@ -76,4 +80,26 @@ body {
 
 .has-widget-icon {
     justify-content: flex-end;
+}
+
+@media screen and (max-width: 1279px) {
+    .notices .toast.is-bottom-right {
+        margin: 10px;
+    }
+}
+
+.has-text-muted {
+    color: #00000063
+}
+
+.grecaptcha-badge {
+    visibility: hidden;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.page-filler {
+    height: calc(100vh - $navbar-height);
 }

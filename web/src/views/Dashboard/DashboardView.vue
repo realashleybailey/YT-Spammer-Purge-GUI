@@ -2,55 +2,62 @@
   <div class="dashboard-view">
     <!-- Title Bar -->
     <TitleBar :title-stack="['Dashboard']" :isMobile="true">
-      <!-- <button class="button is-small is-primary" @click="logout()">Logout</button> -->
-      <b-dropdown :mobile-modal="true" position="is-bottom-left">
-        <template #trigger>
-          <b-button :label="darkModeBtn" size="is-small" />
-        </template>
-
-        <b-dropdown-item @click="changeDarkMode('auto')" :disabled="isDarkMode === 'auto'" aria-role="listitem">Auto Detect</b-dropdown-item>
-        <b-dropdown-item @click="changeDarkMode('dark')" :disabled="isDarkMode === 'dark'" aria-role="listitem">Dark Mode</b-dropdown-item>
-        <b-dropdown-item @click="changeDarkMode('light')" :disabled="isDarkMode === 'light'" aria-role="listitem">Light Mode</b-dropdown-item>
-      </b-dropdown>
+      <DarkModeButton />
     </TitleBar>
 
     <!-- Content -->
     <section class="section">
       <router-view></router-view>
     </section>
+
+    <!-- OnBoarding Tour -->
+    <v-tour name="homepagetour" :steps="steps" :options="{ debug: true, highlight: true }" :callbacks="{ onFinish: onFinishCB(), onSkip: onSkipCB() }"></v-tour>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue"
+
 import TitleBar from "../../components/TitleBar.vue"
-import { getAuth, signOut } from "firebase/auth"
+import DarkModeButton from "../../components/DarkModeButton.vue"
 
 export default Vue.extend({
   name: "DashboardView",
   components: {
-    TitleBar
+    TitleBar,
+    DarkModeButton
   },
-  computed: {
-    isDarkMode() {
-      return this.$store.state.isDarkMode
-    },
-    darkModeBtn() {
-      const darkMode = this.$store.state.isDarkMode
-      if (darkMode === "auto") {
-        return "Auto Detect"
-      } else if (darkMode === "dark") {
-        return "Dark Mode"
-      } else if (darkMode === "light") {
-        return "Light Mode"
-      } else {
-        return "Unknown"
-      }
+  data() {
+    return {
+      steps: [
+        {
+          target: "#homepage-tour-step-1",
+          content: "Select your prefered color scheme.",
+          params: {
+            placement: "left"
+          }
+        },
+        {
+          target: "#homepage-tour-step-2",
+          content: "Quickly access your account settings.",
+          params: {
+            placement: "bottom"
+          }
+        }
+      ]
     }
   },
   methods: {
-    changeDarkMode(darkMode: string) {
-      this.$store.dispatch("updateDarkMode", darkMode)
+    onFinishCB() {
+      this.$store.commit("setLocalTour", true)
+    },
+    onSkipCB() {
+      this.$store.commit("setLocalTour", true)
+    }
+  },
+  mounted() {
+    if (!this.$store.getters.localTour) {
+      this.$tours.homepagetour.start()
     }
   }
 })

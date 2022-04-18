@@ -1,22 +1,28 @@
 <template>
   <div class="login-view">
-    <div class="card">
-      <div class="card-content">
-        <form>
-          <b-field label="Email">
-            <b-input type="email" v-model="email"> </b-input>
-          </b-field>
-          <b-field label="Password">
-            <b-input type="password" v-model="password" password-reveal> </b-input>
-          </b-field>
-          <div class="is-flex is-justify-content-flex-end">
-            <b-button type="is-primary" @click="emailSignin()">Login</b-button>
+    <div class="level">
+      <div class="level-item">
+        <div class="content" style="width: 500px">
+          <div class="card">
+            <div class="card-content">
+              <form>
+                <b-field label="Email">
+                  <b-input type="email" v-model="email"> </b-input>
+                </b-field>
+                <b-field label="Password">
+                  <b-input type="password" v-model="password" password-reveal> </b-input>
+                </b-field>
+                <div class="is-flex is-justify-content-flex-end">
+                  <b-button type="is-primary" @click="emailSignin()">Login</b-button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
+          <div @click="googleSignin()" class="google-signin">
+            <SigninWithGoogle></SigninWithGoogle>
+          </div>
+        </div>
       </div>
-    </div>
-    <div @click="googleSignin()" class="google-signin">
-      <SigninWithGoogle></SigninWithGoogle>
     </div>
   </div>
 </template>

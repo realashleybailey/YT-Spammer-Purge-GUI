@@ -11,6 +11,10 @@ export default Vue.extend({
     }
   },
   render(createElement) {
+    if (!this.$slots.default) {
+      return null
+    }
+
     const renderAncestor = (elements) =>
       createElement(
         "div",
