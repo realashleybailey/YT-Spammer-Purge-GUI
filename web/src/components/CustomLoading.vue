@@ -30,7 +30,7 @@
 }
 </style>
 
-<script lang="ts">
+<script>
 import Vue from "vue"
 import chunk from "lodash/chunk"
 

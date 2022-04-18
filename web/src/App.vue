@@ -1,6 +1,7 @@
 
 <template>
   <div id="app" ref="container">
+    <LoadingIndicator />
     <NavBar />
     <transition name="fade">
       <router-view />
@@ -13,13 +14,15 @@
 import Vue from "vue"
 import NavBar from "./components/NavBar.vue"
 import FooterBar from "./components/FooterBar.vue"
+import LoadingIndicator from "./components/LoadingIndicator.vue"
 import { BComponent } from "buefy/types/components"
 
 export default Vue.extend({
   name: "AppView",
   components: {
     FooterBar,
-    NavBar
+    NavBar,
+    LoadingIndicator
   },
   data() {
     return {

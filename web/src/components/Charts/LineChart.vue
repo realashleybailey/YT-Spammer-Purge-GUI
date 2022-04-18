@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import Vue from "vue"
 import { Line, mixins } from "vue-chartjs"
 

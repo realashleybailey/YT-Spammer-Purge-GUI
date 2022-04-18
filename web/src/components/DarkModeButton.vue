@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown :mobile-modal="true" position="is-bottom-left">
+  <b-dropdown :mobile-modal="true" position="is-bottom-left" id="homepage-tour-step-1">
     <template #trigger>
       <b-button :label="darkModeBtn" size="is-small" />
     </template>

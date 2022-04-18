@@ -5,7 +5,8 @@ module.exports = defineConfig({
   transpileDependencies: true,
   outputDir: path.resolve(__dirname, "dist"),
   devServer: {
-    port: 8000
+    port: 8000,
+    allowedHosts: "all"
   },
   css: {
     sourceMap: true

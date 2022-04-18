@@ -36,6 +36,10 @@
 /* Animate.css custom build (just selected animations to minimize bundle size) */
 @import "../css/animate.css";
 
+@import '../css/vue-tour.css';
+
+@import './swipeCards';
+
 body {
     overflow: hidden;
 }
@@ -94,4 +98,8 @@ body {
 
 html {
     scroll-behavior: smooth;
+}
+
+.page-filler {
+    height: calc(100vh - $navbar-height);
 }

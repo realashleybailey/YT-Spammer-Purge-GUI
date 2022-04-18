@@ -1,0 +1,77 @@
+[debug] [2022-04-15T19:52:09.817Z] ----------------------------------------------------------------------
+[debug] [2022-04-15T19:52:09.827Z] Command:       /usr/local/bin/node /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/web/node_modules/.bin/firebase emulators:start --import=../data/
+[debug] [2022-04-15T19:52:09.829Z] CLI Version:   10.4.1
+[debug] [2022-04-15T19:52:09.830Z] Platform:      darwin
+[debug] [2022-04-15T19:52:09.831Z] Node Version:  v16.13.2
+[debug] [2022-04-15T19:52:09.839Z] Time:          Fri Apr 15 2022 20:52:09 GMT+0100 (British Summer Time)
+[debug] [2022-04-15T19:52:09.841Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-04-15T19:52:11.129Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-04-15T19:52:11.130Z] > authorizing via signed-in user (zeplinwarriors@gmail.com)
+[info] i  emulators: Starting emulators: auth, firestore, hosting, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore, hosting, storage"}}
+[warn] ⚠  emulators: It seems that you are running multiple instances of the emulator suite for project yt-spammer-purge-ae77e. This may result in unexpected behavior. 
+[debug] [2022-04-15T19:52:11.723Z] [hub] writing locator at /var/folders/14/00336kks1wdfy736p01lcz8r0000gn/T/hub-yt-spammer-purge-ae77e.json
+[info] i  firestore: Importing data from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/firestore_export/firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/firestore_export/firestore_export.overall_export_metadata"}}
+[debug] [2022-04-15T19:52:12.068Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2022-04-15T19:52:12.068Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-04-15T19:52:12.069Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/ashley/.cache/firebase/emulators/cloud-firestore-emulator-v1.13.1.jar","--host","localhost","--port",8080,"--seed_from_export","/Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/firestore_export/firestore_export.overall_export_metadata","--rules","/Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/ashley/.cache/firebase/emulators/cloud-firestore-emulator-v1.13.1.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--seed_from_export\",\"/Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/firestore_export/firestore_export.overall_export_metadata\",\"--rules\",\"/Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2022-04-15T19:52:20.295Z] Apr 15, 2022 8:52:20 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://localhost:52032
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Apr 15, 2022 8:52:20 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://localhost:52032\n"}}
+[debug] [2022-04-15T19:52:20.403Z] API endpoint: http://localhost:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost: {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost:8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=localhost:"}}
+[debug] [2022-04-15T19:52:20.417Z] 8080
+
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"8080\n\nDev App Server is now running.\n\n"}}
+[info] i  auth: Importing config from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/auth_export/config.json {"metadata":{"emulator":{"name":"database"},"message":"Importing config from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/auth_export/config.json"}}
+[info] i  auth: Importing accounts from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/auth_export/accounts.json {"metadata":{"emulator":{"name":"database"},"message":"Importing accounts from /Users/ashley/Documents/GitHub/YT-Spammer-Purge/gui/data/auth_export/accounts.json"}}
+[debug] [2022-04-15T19:53:25.121Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-04-15T19:53:28.179Z] Temp file directory for storage emulator: /var/folders/14/00336kks1wdfy736p01lcz8r0000gn/T/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /var/folders/14/00336kks1wdfy736p01lcz8r0000gn/T/firebase/storage/blobs"}}
+[debug] [2022-04-15T19:53:28.226Z] > refreshing access token with scopes: []
+[debug] [2022-04-15T19:53:28.228Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-04-15T19:53:28.336Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Fri, 15 Apr 2022 19:53:28 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-04-15T19:53:28.394Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/sites 
+[debug] [2022-04-15T19:53:29.310Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/sites 200
+[debug] [2022-04-15T19:53:29.311Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/sites {"sites":[{"name":"projects/451656004495/sites/yt-spammer-purge-ae77e","defaultUrl":"https://yt-spammer-purge-ae77e.web.app","appId":"1:451656004495:web:e96d3e091a3790d62591fa","type":"DEFAULT_SITE"}]}
+[debug] [2022-04-15T19:53:29.311Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/webApps/1:451656004495:web:e96d3e091a3790d62591fa/config [none]
+[debug] [2022-04-15T19:53:30.119Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/webApps/1:451656004495:web:e96d3e091a3790d62591fa/config 200
+[debug] [2022-04-15T19:53:30.119Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/yt-spammer-purge-ae77e/webApps/1:451656004495:web:e96d3e091a3790d62591fa/config {"projectId":"yt-spammer-purge-ae77e","appId":"1:451656004495:web:e96d3e091a3790d62591fa","storageBucket":"yt-spammer-purge-ae77e.appspot.com","locationId":"europe-west","apiKey":"AIzaSyABD1VkFV_gMVxhQGVNlME_yVv-djBZw4w","authDomain":"yt-spammer-purge-ae77e.firebaseapp.com","messagingSenderId":"451656004495"}
+[info] i  hosting: Serving hosting files from: web/dist {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mweb/dist\u001b[22m"}}
+[info] ✔  hosting: Local server: http://localhost:8111 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:8111\u001b[22m\u001b[24m"}}
+[debug] [2022-04-15T19:53:30.223Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2022-04-15T19:53:30.224Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2022-04-15T19:53:30.224Z] Starting Emulator UI with command {"binary":"node","args":["/Users/ashley/.cache/firebase/emulators/ui-v1.6.5/server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/ashley/.cache/firebase/emulators/ui-v1.6.5/server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2022-04-15T19:53:30.694Z] Web / API server started at localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Hosting        │ localhost:8111 │ n/a                             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Storage        │ localhost:9199 │ http://localhost:4000/storage   │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2022-04-16T22:41:01.097Z] Apr 16, 2022 11:41:01 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Apr 16, 2022 11:41:01 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}

@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue"
 import MediaCard from "../../components/MediaCard.vue"
 
@@ -49,8 +49,8 @@ export default Vue.extend({
       const comments = this.$store.state.comments
 
       // Sort the comments by date
-      comments.sort(function (a: any, b: any) {
-        return new Date(b.snippet.topLevelComment.snippet.publishedAt) - new Date(a.snippet.topLevelComment.snippet.publishedAt)
+      comments.sort(function (a, b) {
+        return new Date(b.snippet.topLevelComment.snippet.publishedAt).valueOf() - new Date(a.snippet.topLevelComment.snippet.publishedAt).valueOf()
       })
 
       // Split the comments into chunks by the number of comments per page and return the current page
@@ -61,10 +61,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    decodeHTMLString(html: string) {
+    decodeHTMLString(html) {
       return he.decode(html)
     },
-    formatDate(date: string) {
+    formatDate(date) {
       return new Date(date).toLocaleString()
     }
   }

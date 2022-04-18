@@ -4,7 +4,7 @@ import Vuex from "vuex"
 import createPersistedState from "vuex-persistedstate"
 import SecureLS from "secure-ls"
 import router from "@/router"
-import { getAuth, GoogleAuthProvider, linkWithCredential, multiFactor, PhoneAuthProvider, sendEmailVerification, signInWithCredential, signInWithEmailAndPassword, signOut, User, UserCredential } from "firebase/auth"
+import { getAuth, GoogleAuthProvider, linkWithCredential, multiFactor, onAuthStateChanged, PhoneAuthProvider, sendEmailVerification, signInWithCredential, signInWithEmailAndPassword, signOut, User, UserCredential } from "firebase/auth"
 import { LoadingProgrammatic, ToastProgrammatic } from "buefy"
 import { Comment } from "@/types/comment.type"
 import getComments from "@/ts/getComments"
@@ -14,6 +14,8 @@ import ScanLoader from "../components/ScanLoader.vue"
 import { collection, doc, getDoc, getFirestore, writeBatch } from "firebase/firestore"
 import { CommentThreadRequest } from "@/types/commentThreadRequest.type"
 import { GetCommentsThread } from "@/types/getCommentsThread.type"
+import { findMostLikedReply, reduceCommentLikeCount, reduceCommentLikeCountTopLevel } from "@/ts/commentsHelpers"
+import getSpam from "@/ts/getSpam"
 
 const ls = new SecureLS({ isCompression: false })
 Vue.use(Vuex)
@@ -24,7 +26,9 @@ const store = new Vuex.Store({
     userDocument: null as null,
     googletoken: null as string | null,
     comments: [] as gapi.client.youtube.CommentThread[],
-    isDarkMode: "auto" as string
+    spam: [] as [],
+    isDarkMode: "auto" as string,
+    localTour: false as boolean
   },
   mutations: {
     setUser(state, user) {
@@ -39,12 +43,18 @@ const store = new Vuex.Store({
     setComments(state, comments) {
       state.comments = comments
     },
+    setSpam(state, spam) {
+      state.spam = spam
+    },
     setDarkMode(state, isDarkMode) {
       if (isDarkMode === "auto" || isDarkMode === "dark" || isDarkMode === "light") {
         state.isDarkMode = isDarkMode
       } else {
         state.isDarkMode = "auto"
       }
+    },
+    setLocalTour(state, localTour) {
+      state.localTour = localTour
     }
   },
   getters: {
@@ -74,6 +84,9 @@ const store = new Vuex.Store({
       return {
         requiresEmailVerification: state.user !== null && state.user.emailVerified === false
       }
+    },
+    localTour(state) {
+      return state.localTour
     }
   },
   actions: {
@@ -191,6 +204,18 @@ const store = new Vuex.Store({
       // Return the comments
       commit("setComments", comments)
     },
+    async getSpam({ commit, state }) {
+      // Check if user is logged in
+      if (!state.user) {
+        throw new Error("No user logged in")
+      }
+
+      // Get the comments
+      const spam = await getSpam(state.user.uid)
+
+      // Return the comments
+      commit("setSpam", spam)
+    },
     async getMostPopularComment({ state }): Promise<gapi.client.youtube.Comment | null> {
       // Check if user is logged in
       if (!state.user) {
@@ -203,78 +228,29 @@ const store = new Vuex.Store({
       }
 
       // Return the most popular comment
-      const mostLikedComment = state.comments.reduce((a, b) => {
-        // If a is null, return b
-        if (!a.snippet?.topLevelComment?.snippet?.likeCount) {
-          return b
-        }
+      const mostLikedComment = state.comments.reduce(reduceCommentLikeCountTopLevel)
+      const mostLikedReply = findMostLikedReply(state.comments)
 
-        // If b is null, return a
-        if (!b.snippet?.topLevelComment?.snippet?.likeCount) {
-          return a
-        }
+      if (!mostLikedComment || !mostLikedReply) {
+        return null
+      }
 
-        return a.snippet.topLevelComment.snippet.likeCount > b.snippet.topLevelComment.snippet.likeCount ? a : b
-      })
-
-      const repliedArray: gapi.client.youtube.Comment[] = []
-
-      state.comments.forEach((comment) => {
-        if (comment.replies) {
-          const mostLikedReply = comment.replies?.comments?.reduce((c, d) => {
-            // If c is null, return d
-            if (!c.snippet?.likeCount) {
-              return d
-            }
-
-            // If d is null, return c
-            if (!d.snippet?.likeCount) {
-              return c
-            }
-
-            return c.snippet.likeCount > d.snippet.likeCount ? c : d
-          })
-
-          if (mostLikedReply) {
-            repliedArray.push(mostLikedReply)
-          }
-        }
-      })
-
-      const mostLikedReply = repliedArray.reduce((c, d) => {
-        // If c is null, return d
-        if (!c.snippet?.likeCount) {
-          return d
-        }
-
-        // If d is null, return c
-        if (!d.snippet?.likeCount) {
-          return c
-        }
-
-        return c.snippet.likeCount > d.snippet.likeCount ? c : d
-      })
-
-      if (mostLikedComment.snippet?.topLevelComment?.snippet?.likeCount) {
-        if (mostLikedReply.snippet?.likeCount) {
-          return mostLikedReply.snippet.likeCount > mostLikedComment.snippet.topLevelComment.snippet.likeCount ? mostLikedReply : mostLikedComment.snippet.topLevelComment
-        }
-        return mostLikedComment.snippet.topLevelComment
-      } else if (mostLikedReply.snippet?.likeCount) {
-        return mostLikedReply
+      if (mostLikedComment.snippet && mostLikedComment.snippet.topLevelComment && mostLikedComment.snippet.topLevelComment.snippet && mostLikedComment.snippet.topLevelComment.snippet.likeCount && mostLikedReply.snippet && mostLikedReply.snippet.likeCount) {
+        return mostLikedComment.snippet.topLevelComment.snippet.likeCount > mostLikedReply.snippet.likeCount ? mostLikedComment : mostLikedReply
       }
 
       return null
     },
-    async getCommentsChartData({ state, dispatch, getters }, options: ChartData): Promise<[ChartData, ChartOptions]> {
+    async getCommentsChartData({ state, dispatch, getters }, options: ChartData): Promise<[ChartData, ChartOptions] | void> {
       // Check if user is logged in
       if (!state.user) {
-        throw new Error("No user logged in")
+        dispatch("logout")
+        return
       }
 
       // Check if comments are loaded
       if (state.comments.length === 0) {
-        throw new Error("No comments loaded")
+        return
       }
 
       // Define the chart data
@@ -395,9 +371,21 @@ const store = new Vuex.Store({
 
       return commentsByID.sort((a, b) => b.totalComments - a.totalComments).slice(0, 10)
     },
+    async createAuthWatcher() {
+      const auth = getAuth()
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          store.commit("setUser", user)
+        } else if (store.state.user !== null) {
+          store.dispatch("logout")
+        }
+      })
+    },
     async runOnLogin({ dispatch }) {
-      dispatch("getComments")
       dispatch("getUserDocument")
+      dispatch("getComments")
+      dispatch("getSpam")
     },
     async signInWithEmailAndPassword({ dispatch, commit }, { email, password }) {
       // Create loading indicator
@@ -809,14 +797,17 @@ const store = new Vuex.Store({
       const auth = getAuth()
 
       // Logout
-      signOut(auth).then(() => {
-        // Remove user from store and other data
-        commit("setUser", null)
-        commit("setGoogleToken", null)
+      signOut(auth)
 
-        // Redirect to home
-        router.push("/")
-      })
+      // Remove user from store and other data
+      commit("setUser", null)
+      commit("setGoogleToken", null)
+
+      commit("setComments", [])
+      commit("setSpam", [])
+
+      // Redirect to home
+      router.push("/")
     }
   },
   plugins: [

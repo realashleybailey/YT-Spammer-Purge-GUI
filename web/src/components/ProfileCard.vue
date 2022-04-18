@@ -12,7 +12,7 @@
         <!-- View Profile End -->
 
         <!-- View Settings -->
-        <b-button tag="router-link" :to="{ path: '/settings' }" class="button is-primary is-small">
+        <b-button tag="router-link" :to="{ path: '/settings' }" class="button is-primary is-small" id="homepage-tour-step-2">
           <span class="icon">
             <i class="fas fa-cog"></i>
           </span>

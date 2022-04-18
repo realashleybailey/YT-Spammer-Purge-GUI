@@ -46,6 +46,11 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
+    path: "/test",
+    name: "Test",
+    component: () => import("../views/TestView.vue")
+  },
+  {
     path: "/view",
     name: "view",
     component: ViewView,
@@ -160,6 +165,21 @@ const router = new VueRouter({
       }
     })
   }
+})
+
+router.beforeEach((to, from, next) => {
+  try {
+    Vue.prototype.$beginLoading()
+    next()
+  } catch (e) {
+    next()
+  }
+})
+
+router.afterEach(() => {
+  try {
+    Vue.prototype.$endLoading()
+  } catch (e) {}
 })
 
 router.beforeEach((to, from, next) => {

@@ -12,7 +12,7 @@
           <b-button tag="router-link" to="/view/comments" class="button is-primary is-small">View Comments</b-button>
         </div>
       </CardWidget>
-      <CardWidget v-if="totalComments > 0" label="Total Spam" :number="totalComments" pack="fa" icon="comment-slash">
+      <CardWidget v-if="totalSpam > 0" label="Total Spam" :number="totalSpam" pack="fa" icon="comment-slash">
         <div class="buttons is-flex is-justify-content-flex-start" style="width: 100%">
           <b-button tag="router-link" to="/view/spam" class="button is-primary is-small">View Spam</b-button>
         </div>
@@ -53,7 +53,6 @@ import Tiles from "../../components/Tiles.vue"
 import MediaCard from "../../components/MediaCard.vue"
 
 import { ChartData, ChartOptions } from "chart.js"
-import { Comment } from "@/types/comment.type"
 
 import he from "he"
 
@@ -85,7 +84,10 @@ export default Vue.extend({
       return await this.$store.dispatch("getCommentsChartData", this.chartSettings)
     },
     async fetchMostPopularComment() {
-      return await this.$store.dispatch("getMostPopularComment")
+      const comment = await this.$store.dispatch("getMostPopularComment")
+      if (comment) {
+        this.mostPopularComment = comment
+      }
     },
     decodeHTMLString(html: string) {
       return he.decode(html)
@@ -94,15 +96,20 @@ export default Vue.extend({
   computed: {
     totalComments() {
       return this.$store.state.comments.length || 0
+    },
+    totalSpam() {
+      return this.$store.state.spam.length || 0
     }
   },
   async mounted() {
-    const [chartData, chartOptions] = await this.fetchChartData()
-    console.log(chartOptions)
-    this.chartData = chartData
-    this.chartOptions = chartOptions
+    if (this.totalComments > 0) {
+      const [chartData, chartOptions] = await this.fetchChartData()
 
-    this.mostPopularComment = await this.fetchMostPopularComment()
+      this.chartData = chartData
+      this.chartOptions = chartOptions
+
+      await this.fetchMostPopularComment()
+    }
   }
 })
 </script>
