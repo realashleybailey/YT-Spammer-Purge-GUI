@@ -106,7 +106,7 @@ export default {
   methods: {
     createStep() {
       if (this.debug) {
-        console.log("[Vue Tour] The target element " + this.step.target + ' of .v-step[id="' + this.hash + '"] is:', this.targetElement)
+        console.log("[Vue Tour] The target element " + this.step.target + " of .v-step[id=\"" + this.hash + "\"] is:", this.targetElement)
       }
 
       if (this.isSticky) {
@@ -119,7 +119,7 @@ export default {
           createPopper(this.targetElement, this.$refs["v-step-" + this.hash], this.params)
         } else {
           if (this.debug) {
-            console.error("[Vue Tour] The target element " + this.step.target + ' of .v-step[id="' + this.hash + '"] does not exist!')
+            console.error("[Vue Tour] The target element " + this.step.target + " of .v-step[id=\"" + this.hash + "\"] does not exist!")
           }
           this.$emit("targetNotFound", this.step)
           if (this.stopOnFail) {

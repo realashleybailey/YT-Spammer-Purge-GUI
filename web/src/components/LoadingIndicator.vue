@@ -23,7 +23,7 @@
 }
 </style>
 
-<script lang="ts">
+<script>
 import Vue from "vue"
 export default Vue.extend({
   name: "LoadingIndicator",

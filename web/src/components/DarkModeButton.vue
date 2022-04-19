@@ -1,12 +1,12 @@
 <template>
   <b-dropdown :mobile-modal="true" position="is-bottom-left" id="homepage-tour-step-1">
     <template #trigger>
-      <b-button :label="darkModeBtn" size="is-small" />
+      <b-button :label="darkModeBtn" size="is-small" id="dark-mode-btn" />
     </template>
 
-    <b-dropdown-item @click="changeDarkMode('auto')" :disabled="isDarkMode === 'auto'" aria-role="listitem">Auto Detect</b-dropdown-item>
-    <b-dropdown-item @click="changeDarkMode('dark')" :disabled="isDarkMode === 'dark'" aria-role="listitem">Dark Mode</b-dropdown-item>
-    <b-dropdown-item @click="changeDarkMode('light')" :disabled="isDarkMode === 'light'" aria-role="listitem">Light Mode</b-dropdown-item>
+    <b-dropdown-item id="dark-mode-btn1" @click="changeDarkMode('auto')" :disabled="isDarkMode === 'auto'" aria-role="listitem">Auto Detect</b-dropdown-item>
+    <b-dropdown-item id="dark-mode-btn2" @click="changeDarkMode('dark')" :disabled="isDarkMode === 'dark'" aria-role="listitem">Dark Mode</b-dropdown-item>
+    <b-dropdown-item id="dark-mode-btn3" @click="changeDarkMode('light')" :disabled="isDarkMode === 'light'" aria-role="listitem">Light Mode</b-dropdown-item>
   </b-dropdown>
 </template>
 
