@@ -26,6 +26,22 @@ const reduceCommentLikeCountTopLevel = (a: gapi.client.youtube.CommentThread, b:
   return a.snippet.topLevelComment.snippet.likeCount > b.snippet.topLevelComment.snippet.likeCount ? a : b
 }
 
+const findMostLikedComment = (comments: gapi.client.youtube.CommentThread[]): gapi.client.youtube.Comment | null => {
+  // Get the most liked comment from the array of comments
+  const comment = comments.reduce(reduceCommentLikeCountTopLevel)
+
+  // If the most liked comment exists then return it
+  if (!comment) {
+    return null
+  }
+
+  if (!comment.snippet || !comment.snippet.topLevelComment) {
+    return null
+  }
+
+  return comment.snippet.topLevelComment
+}
+
 const findMostLikedReply = (comments: gapi.client.youtube.CommentThread[]): gapi.client.youtube.Comment | null => {
   // An array of the most liked replies from each comment
   const repliedArray: gapi.client.youtube.Comment[] = []
@@ -51,4 +67,4 @@ const findMostLikedReply = (comments: gapi.client.youtube.CommentThread[]): gapi
   return null
 }
 
-export { reduceCommentLikeCount, reduceCommentLikeCountTopLevel, findMostLikedReply }
+export { reduceCommentLikeCount, reduceCommentLikeCountTopLevel, findMostLikedComment, findMostLikedReply }

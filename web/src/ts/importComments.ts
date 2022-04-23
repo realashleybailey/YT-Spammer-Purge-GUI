@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, writeBatch } from "firebase/firestore"
 import dataset from "../assets/json/datasetComments.json"
 
@@ -43,7 +44,7 @@ const importSpamMarkers = () => {
 
     console.log(`${totalCycle} / ${comment.COMMENT_ID}`)
 
-    if ((comment.CLASS === 1)) {
+    if (comment.CLASS === 1) {
       const docRef = doc(db, "users", "cL6vtDtHZIWdNp0G4kNkMArDG9Q2", "spam", comment.COMMENT_ID)
 
       if (cycle >= 450) {
@@ -92,6 +93,21 @@ const convertComments = async () => {
     // Doc Ref
     const docRef = doc(db, "users", "cL6vtDtHZIWdNp0G4kNkMArDG9Q2", "comments", data.COMMENT_ID)
 
+    // random 11 characters for the comment ID
+
+    const VIDEOIDS = ["DUT5rEU6pqM", "9bZkp7q19f0", "KQ6zr6kCPj8", "YVkUvmDQ3HY", "CevxZvSJLk8"]
+    const VIDEOID = VIDEOIDS[Math.floor(Math.random() * VIDEOIDS.length)]
+
+    let date = new Date(data.DATE)
+
+    function isValidDate(d: number | Date) {
+      return d instanceof Date && !isNaN(d as unknown as number)
+    }
+
+    if (!isValidDate(date)) {
+      date = new Date()
+    }
+
     // Template for new comment
     const template = {
       id: data.COMMENT_ID,
@@ -112,17 +128,17 @@ const convertComments = async () => {
             authorProfileImageUrl: "https://i.ytimg.com/vi/QH-Q-QH-QH-Q/hqdefault.jpg",
             canRate: true,
             channelId: "UC_aE0rQ1_9rsTo4Iwb2rbwQ",
-            likeCount: 1,
-            publishedAt: data.DATE + "Z",
+            likeCount: Math.floor(Math.random() * 1000),
+            publishedAt: date.toISOString(),
             textDisplay: data.CONTENT,
             textOriginal: data.CONTENT,
-            updatedAt: data.DATE + "Z",
-            videoId: "wq75TpSwAT4",
+            updatedAt: date.toISOString(),
+            videoId: VIDEOID,
             viewerRating: "like"
           }
         },
         totalReplyCount: 0,
-        videoId: "wq75TpSwAT4"
+        videoId: VIDEOID
       }
     }
 
@@ -139,5 +155,9 @@ const convertComments = async () => {
 
   batch.commit()
 }
+
+;(window as any).convertComments = convertComments
+;(window as any).importComments = importComments
+;(window as any).importSpamMarkers = importSpamMarkers
 
 export { importComments, importSpamMarkers, convertComments }

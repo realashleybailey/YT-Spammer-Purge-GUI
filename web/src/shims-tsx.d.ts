@@ -1,5 +1,5 @@
 import Vue, { VNode } from "vue"
-
+import { MyConsole } from "./types/myconsole.type"
 declare global {
   namespace JSX {
     interface Element extends VNode {}
@@ -8,4 +8,6 @@ declare global {
       [elem: string]: any
     }
   }
+
+  declare let myconsole: MyConsole
 }
