@@ -1,36 +1,42 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Vue from "vue"
-import Vuex from "vuex"
-import createPersistedState from "vuex-persistedstate"
-import SecureLS from "secure-ls"
-import router from "@/router"
-import { getAuth, GoogleAuthProvider, linkWithCredential, multiFactor, onAuthStateChanged, PhoneAuthProvider, sendEmailVerification, signInWithCredential, signInWithEmailAndPassword, signOut, User, UserCredential } from "firebase/auth"
-import { LoadingProgrammatic, ToastProgrammatic } from "buefy"
-import { Comment } from "@/types/comment.type"
-import getComments from "@/ts/getComments"
-import { ChartData, ChartOptions } from "chart.js"
 import chartOptions from "@/assets/json/chartOptions.json"
-import ScanLoader from "../components/ScanLoader.vue"
-import { collection, doc, getDoc, getFirestore, writeBatch } from "firebase/firestore"
+import router from "@/router"
+import { findMostLikedComment, findMostLikedReply } from "@/ts/commentsHelpers"
+import getComments from "@/ts/getComments"
+import getSpam from "@/ts/getSpam"
+import getVideos from "@/ts/getVideos"
 import { CommentThreadRequest } from "@/types/commentThreadRequest.type"
 import { GetCommentsThread } from "@/types/getCommentsThread.type"
-import { findMostLikedReply, reduceCommentLikeCount, reduceCommentLikeCountTopLevel } from "@/ts/commentsHelpers"
-import getSpam from "@/ts/getSpam"
+import { LoadingProgrammatic, ToastProgrammatic } from "buefy"
+import { ChartData, ChartOptions } from "chart.js"
+import { getAuth, GoogleAuthProvider, linkWithCredential, multiFactor, onAuthStateChanged, PhoneAuthProvider, sendEmailVerification, signInWithCredential, signInWithEmailAndPassword, signOut, User, UserCredential } from "firebase/auth"
+import { collection, doc, getDoc, getFirestore, writeBatch } from "firebase/firestore"
+import Vue from "vue"
+import Vuex from "vuex"
+import VuexPersistence from "./utils/persistence"
+import ScanLoader from "../components/ScanLoader.vue"
 
-const ls = new SecureLS({ isCompression: false })
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    isLoggedIn: false,
     user: null as User | null,
     userDocument: null as null,
     googletoken: null as string | null,
     comments: [] as gapi.client.youtube.CommentThread[],
     spam: [] as [],
+    videos: [] as gapi.client.youtube.Video[],
     isDarkMode: "auto" as string,
-    localTour: false as boolean
+    localTour: false as boolean,
+    mostPopularComment: null as null | gapi.client.youtube.Comment,
+    mostCommentedVideos: null as null | ChartData,
+    mostCommentedVideosTitles: null as null | { [key: string]: string }
   },
   mutations: {
+    setIsLoggedIn(state, isLoggedIn: boolean) {
+      state.isLoggedIn = isLoggedIn
+    },
     setUser(state, user) {
       state.user = user
     },
@@ -46,6 +52,9 @@ const store = new Vuex.Store({
     setSpam(state, spam) {
       state.spam = spam
     },
+    setVideos(state, videos) {
+      state.videos = videos
+    },
     setDarkMode(state, isDarkMode) {
       if (isDarkMode === "auto" || isDarkMode === "dark" || isDarkMode === "light") {
         state.isDarkMode = isDarkMode
@@ -55,12 +64,18 @@ const store = new Vuex.Store({
     },
     setLocalTour(state, localTour) {
       state.localTour = localTour
+    },
+    setMostPopularComment(state, mostPopularComment) {
+      state.mostPopularComment = mostPopularComment
+    },
+    setMostCommentedVideos(state, mostCommentedVideos) {
+      state.mostCommentedVideos = mostCommentedVideos
+    },
+    setMostCommentedVideosTitles(state, mostCommentedVideosTitles) {
+      state.mostCommentedVideosTitles = mostCommentedVideosTitles
     }
   },
   getters: {
-    isLoggedIn(state) {
-      return state.user !== null
-    },
     isDarkMode(state) {
       if (state.isDarkMode === "auto") {
         return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -71,8 +86,7 @@ const store = new Vuex.Store({
       }
     },
     chartOptions() {
-      const options = chartOptions as unknown as ChartOptions
-      return options
+      return chartOptions as unknown as ChartOptions
     },
     getGoogleToken(state) {
       return state.googletoken
@@ -81,9 +95,11 @@ const store = new Vuex.Store({
       return state.user !== null && state.user.emailVerified
     },
     disabledReasons(state) {
-      return {
+      const reasons = {
         requiresEmailVerification: state.user !== null && state.user.emailVerified === false
       }
+
+      return reasons
     },
     localTour(state) {
       return state.localTour
@@ -91,38 +107,47 @@ const store = new Vuex.Store({
   },
   actions: {
     async getUserDocument({ state, commit }) {
-      // Get firestore instance
-      const db = getFirestore()
+      try {
+        // Console Message
+        myconsole.info("getUserDocument", "Getting user document from firestore")
+        console.log("getUserDocument", "Getting user document from firestore")
+        // Get firestore instance
+        const db = getFirestore()
 
-      // Get the current user id
-      const userId = state.user?.uid
+        // Get the current user id
+        const userId = state.user?.uid
 
-      // Check if userId is set
-      if (!userId) {
-        throw new Error("No user logged in")
+        // Check if userId is set
+        if (!userId) {
+          throw new Error("No user logged in")
+        }
+
+        // Get the current user document
+        const users = collection(db, "users")
+
+        // Get the user document
+        const usersRef = doc(users, userId)
+
+        // Get the user document
+        const userDoc = await getDoc(usersRef)
+
+        if (!userDoc.exists) {
+          throw new Error("User does not exist")
+        }
+
+        // Get the user data
+        const userData = userDoc.data()
+
+        console.log("User data:", userData)
+
+        // Set the user data
+        commit("setUserDocument", userData)
+
+        // Return the user data
+        return userData
+      } catch (error) {
+        console.log(error)
       }
-
-      // Get the current user document
-      const users = collection(db, "users")
-
-      // Get the user document
-      const usersRef = doc(users, userId)
-
-      // Get the user document
-      const userDoc = await getDoc(usersRef)
-
-      if (!userDoc.exists) {
-        throw new Error("User does not exist")
-      }
-
-      // Get the user data
-      const userData = userDoc.data()
-
-      // Set the user data
-      commit("setUserDocument", userData)
-
-      // Return the user data
-      return userData
     },
     async updateDarkMode({ commit, dispatch }, isDarkMode) {
       commit("setDarkMode", isDarkMode)
@@ -216,32 +241,71 @@ const store = new Vuex.Store({
       // Return the comments
       commit("setSpam", spam)
     },
-    async getMostPopularComment({ state }): Promise<gapi.client.youtube.Comment | null> {
+    async getVideos({ commit, state }) {
       // Check if user is logged in
       if (!state.user) {
         throw new Error("No user logged in")
       }
 
       // Get the comments
+      const videos = await getVideos(state.user.uid)
+
+      // Return the comments
+      commit("setVideos", videos)
+    },
+    async getMostPopularComment({ state, commit }): Promise<gapi.client.youtube.Comment | null> {
+      // Check if user is logged in
+      if (!state.user) {
+        throw new Error("No user logged in")
+      }
+
+      // Get the comments and if length is 0 return null
       if (state.comments.length === 0) {
         return null
       }
 
-      // Return the most popular comment
-      const mostLikedComment = state.comments.reduce(reduceCommentLikeCountTopLevel)
+      // Return the most popular comment and reply
+      const mostLikedComment = findMostLikedComment(state.comments)
       const mostLikedReply = findMostLikedReply(state.comments)
 
-      if (!mostLikedComment || !mostLikedReply) {
+      // If there is no reply but a comment, return the comment
+      if (!mostLikedReply && mostLikedComment !== null) {
+        commit("setMostPopularComment", mostLikedComment)
+        return mostLikedComment
+      }
+
+      // If there is a reply but no comment, return the reply
+      if (!mostLikedComment && mostLikedReply !== null) {
+        commit("setMostPopularComment", mostLikedReply)
+        return mostLikedReply
+      }
+
+      // If there is no comment and no reply, return null
+      if (!mostLikedComment && !mostLikedReply) {
         return null
       }
 
-      if (mostLikedComment.snippet && mostLikedComment.snippet.topLevelComment && mostLikedComment.snippet.topLevelComment.snippet && mostLikedComment.snippet.topLevelComment.snippet.likeCount && mostLikedReply.snippet && mostLikedReply.snippet.likeCount) {
-        return mostLikedComment.snippet.topLevelComment.snippet.likeCount > mostLikedReply.snippet.likeCount ? mostLikedComment : mostLikedReply
+      // Check if mostLikedComment has like count and if there is not return null
+      if (!mostLikedComment?.snippet || !mostLikedComment.snippet.likeCount) {
+        return null
       }
 
-      return null
+      // Check if mostLikedReply has like count and if there is not return null
+      if (!mostLikedReply?.snippet || !mostLikedReply.snippet.likeCount) {
+        return null
+      }
+
+      // Check if mostLikedComment has more likes than mostLikedReply and if there is return mostLikedComment
+      if (mostLikedComment.snippet.likeCount > mostLikedReply.snippet.likeCount) {
+        commit("setMostPopularComment", mostLikedComment)
+        return mostLikedComment
+      }
+
+      // Else return mostLikedReply
+      commit("setMostPopularComment", mostLikedReply)
+      return mostLikedReply
     },
-    async getCommentsChartData({ state, dispatch, getters }, options: ChartData): Promise<[ChartData, ChartOptions] | void> {
+    async getMostCommentedVideos({ state, dispatch, commit }, options: ChartData): Promise<ChartData | void> {
       // Check if user is logged in
       if (!state.user) {
         dispatch("logout")
@@ -252,6 +316,9 @@ const store = new Vuex.Store({
       if (state.comments.length === 0) {
         return
       }
+
+      // Sort the comments
+      const sortedComments = await dispatch("sortCommentsByID", state.comments)
 
       // Define the chart data
       const defaultOptions: ChartData = {
@@ -267,35 +334,8 @@ const store = new Vuex.Store({
         ]
       }
 
-      // Sort the comments
-      const sortedComments = await dispatch("sortCommentsByID", state.comments)
-
-      // Define the titles by video id
-      const videoTitles: { [key: string]: string } = {}
-
-      await sortedComments.forEach(async (commentData: { videoID: string; totalComments: number }) => {
-        const videoData = await dispatch("getViewInfoFromID", commentData.videoID)
-        videoTitles[commentData.videoID] = videoData.title
-      })
-
-      // Define the chart options
-      const defaultChartOptions: ChartOptions = {
-        tooltips: {
-          callbacks: {
-            title: function (t) {
-              if (t[0] && t[0].label) {
-                return videoTitles[t[0].label]
-              } else {
-                return ""
-              }
-            }
-          }
-        }
-      }
-
       // Merge the data and options
       const newChartData: ChartData = { ...options, ...defaultOptions }
-      const newChartOptions: ChartOptions = { ...getters.chartOptions, ...defaultChartOptions }
 
       // Generate the chart data labels and data
       const labels: string[] = []
@@ -311,7 +351,24 @@ const store = new Vuex.Store({
       newChartData.datasets![0].data = data
 
       // Return the chart data and options
-      return [newChartData, newChartOptions]
+      commit("setMostCommentedVideos", newChartData)
+      return newChartData
+    },
+    async getMostCommentedVideosTitles({ state, commit, dispatch }): Promise<{ [key: string]: string }> {
+      // Sort the comments
+      const sortedComments = await dispatch("sortCommentsByID", state.comments)
+
+      // Define the titles by video id
+      const videoTitles: { [key: string]: string } = {}
+
+      await sortedComments.forEach(async (commentData: { videoID: string; totalComments: number }) => {
+        const videoData = await dispatch("getViewInfoFromID", commentData.videoID)
+        videoTitles[commentData.videoID] = videoData.title
+      })
+
+      // Return the titles
+      commit("setMostCommentedVideosTitles", videoTitles)
+      return videoTitles
     },
     async sortCommentsByID(_, comments: gapi.client.youtube.CommentThread[]) {
       // Store the comments
@@ -371,21 +428,16 @@ const store = new Vuex.Store({
 
       return commentsByID.sort((a, b) => b.totalComments - a.totalComments).slice(0, 10)
     },
-    async createAuthWatcher() {
+    async createAuthWatcher(_, callback: (user: User) => void) {
       const auth = getAuth()
 
       onAuthStateChanged(auth, async (user) => {
         if (user) {
-          store.commit("setUser", user)
+          callback(user)
         } else if (store.state.user !== null) {
           store.dispatch("logout")
         }
       })
-    },
-    async runOnLogin({ dispatch }) {
-      dispatch("getUserDocument")
-      dispatch("getComments")
-      dispatch("getSpam")
     },
     async signInWithEmailAndPassword({ dispatch, commit }, { email, password }) {
       // Create loading indicator
@@ -416,6 +468,7 @@ const store = new Vuex.Store({
 
       // Close loading indicator
       loading.close()
+      commit("setIsLoggedIn", true)
       dispatch("runOnLogin")
 
       // Redirect to dashboard
@@ -466,6 +519,7 @@ const store = new Vuex.Store({
 
       // Close loading indicator
       loading.close()
+      commit("setIsLoggedIn", true)
       dispatch("runOnLogin")
 
       // Redirect to dashboard
@@ -583,7 +637,7 @@ const store = new Vuex.Store({
 
       console.log(Vue.prototype.$verificationID)
     },
-    async startFirstScan({ state }) {
+    async startFirstScan() {
       // Create the component
       const ScanComponent = Vue.extend(ScanLoader)
 
@@ -792,12 +846,25 @@ const store = new Vuex.Store({
 
       return sections
     },
-    logout({ commit }) {
+    async runOnLogin({ dispatch }) {
+      await dispatch("getUserDocument")
+      await dispatch("getComments")
+      await dispatch("getSpam")
+      await dispatch("getVideos")
+      await dispatch("getMostPopularComment")
+      await dispatch("getMostCommentedVideosTitles")
+      await dispatch("getMostCommentedVideos")
+    },
+    async logout({ commit }) {
       // Get auth instance
       const auth = getAuth()
 
       // Logout
-      signOut(auth)
+      await signOut(auth)
+      commit("setIsLoggedIn", false)
+
+      // Redirect to home
+      await router.push("/")
 
       // Remove user from store and other data
       commit("setUser", null)
@@ -805,24 +872,23 @@ const store = new Vuex.Store({
 
       commit("setComments", [])
       commit("setSpam", [])
+      commit("setVideos", [])
 
-      // Redirect to home
-      router.push("/")
+      commit("setMostPopularComment", null)
+      commit("setMostCommentedVideos", null)
+      commit("setMostCommentedVideosTitles", null)
     }
   },
-  plugins: [
-    createPersistedState({
-      storage: {
-        getItem: (key) => ls.get(key),
-        setItem: (key, value) => ls.set(key, value),
-        removeItem: (key) => ls.remove(key)
-      }
-    })
-  ]
+  // plugins: [
+  //   createPersistedState({
+  //     storage: {
+  //       getItem: (key) => ls.get(key),
+  //       setItem: (key, value) => ls.set(key, value),
+  //       removeItem: (key) => ls.remove(key)
+  //     }
+  //   })
+  // ]
+  plugins: [VuexPersistence]
 })
 
 export default store
-
-export function useStore() {
-  return store
-}

@@ -10,9 +10,11 @@ import "./scss/main.scss"
 import VueTour from "./plugin/VueTour/main"
 import VueFirebase from "./plugin/VueFirebase"
 
-import { convertComments, importComments, importSpamMarkers } from "./ts/importComments"
-import { predictSpam } from "./ts/tensorflow"
+import "./ts/importComments"
+import "./ts/tensorflow"
 import "./ts/brain"
+import "@/ts/myconsole"
+import { User } from "firebase/auth"
 
 const config = {
   projectId: "yt-spammer-purge-ae77e",
@@ -37,61 +39,12 @@ Vue.use(VueTour)
 Vue.use(VueFirebase, { app: config, emulator: true })
 Vue.use(Buefy)
 
-store.dispatch("createAuthWatcher")
+store.dispatch("createAuthWatcher", (user: User) => {
+  store.commit("setUser", user)
+  // store.dispatch("runOnLogin")
+})
 
 Vue.config.productionTip = false
-;(window as any).convertComments = convertComments
-;(window as any).importComments = importComments
-;(window as any).importSpamMarkers = importSpamMarkers
-;(window as any).predictSpam = predictSpam
-;(window as any).start = async () => {
-  const comments = {}
-
-  store.state.spam.forEach((spam: any) => {
-    comments[spam.id] = true
-  })
-
-  const good: any[] = []
-  const bad: any[] = []
-
-  for (const comment of store.state.comments) {
-    const result = await predictSpam(comment.snippet?.topLevelComment?.snippet?.textDisplay || "")
-    const spam = await (result as any).data()
-
-    const isSpam = comments[comment.id || ""] || false
-    const matched = spam[0] >= 0.9967515239246206
-    console.log(comment.snippet?.topLevelComment?.snippet?.textDisplay)
-    console.log("SPAM: %c" + (isSpam ? "TRUE" : "FALSE"), "background: #" + (isSpam ? "ff0000" : "00ff00") + "; color: #" + (isSpam ? "ffffff" : "000000") + "")
-    console.log("ACCURACY: " + spam[0])
-    console.log("MATCHED: %c" + (matched ? "TRUE" : "FALSE"), "background: #" + (matched ? "ff0000" : "00ff00") + "; color: #" + (matched ? "ffffff" : "000000") + "")
-    console.log("\n")
-
-    if (isSpam && matched) {
-      good.push(spam[0])
-    }
-    if (!isSpam && !matched) {
-      bad.push(spam[0])
-    }
-  }
-
-  // Get the mean of the good and bad arrays
-  const goodMean = good.reduce((a, b) => a + b, 0) / good.length
-  const badMean = bad.reduce((a, b) => a + b, 0) / bad.length
-
-  // Get the standard deviation of the good and bad arrays
-  const goodStd = Math.sqrt(good.reduce((a, b) => a + Math.pow(b - goodMean, 2), 0) / good.length)
-  const badStd = Math.sqrt(bad.reduce((a, b) => a + Math.pow(b - badMean, 2), 0) / bad.length)
-
-  // Get the average difference between the good and bad arrays
-  const goodBadDiff = good.reduce((a, b) => a + Math.abs(b - badMean), 0) / good.length
-  const badGoodDiff = bad.reduce((a, b) => a + Math.abs(b - goodMean), 0) / bad.length
-
-  console.log(goodMean, badMean)
-  console.log(goodStd, badStd)
-  console.log(goodBadDiff, badGoodDiff)
-
-  console.log(good, bad)
-}
 
 new Vue({
   router,

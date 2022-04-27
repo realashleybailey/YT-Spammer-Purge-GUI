@@ -46,7 +46,7 @@ export default Vue.extend({
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn
+      return this.$store.state.isLoggedIn
     },
     isDark() {
       return this.$store.getters.isDarkMode

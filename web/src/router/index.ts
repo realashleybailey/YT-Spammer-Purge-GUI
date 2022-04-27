@@ -37,7 +37,7 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "",
-        name: "dashboard-home",
+        name: "Dashboard",
         component: () => import("../views/Dashboard/DashboardHomeView.vue")
       }
     ],
@@ -67,7 +67,8 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title: "View"
     }
   },
   {
@@ -82,7 +83,8 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      title: "Settings"
     }
   },
   {
@@ -105,7 +107,10 @@ const routes: Array<RouteConfig> = [
         name: "Stack Details",
         component: () => import("../views/Doc/DocStackDetailView.vue")
       }
-    ]
+    ],
+    meta: {
+      title: "Documentation"
+    }
   },
   {
     path: "/pricing",
@@ -117,7 +122,10 @@ const routes: Array<RouteConfig> = [
         name: "Pricing",
         component: () => import("../views/Pricing/PricingHomeView.vue")
       }
-    ]
+    ],
+    meta: {
+      title: "Pricing"
+    }
   },
   {
     path: "/login",
@@ -131,7 +139,8 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      requiresGuest: true
+      requiresGuest: true,
+      title: "Login"
     }
   },
   {
@@ -146,7 +155,8 @@ const routes: Array<RouteConfig> = [
       }
     ],
     meta: {
-      requiresGuest: true
+      requiresGuest: true,
+      title: "Register"
     }
   }
 ]
@@ -168,22 +178,16 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // Begin loading
   try {
     Vue.prototype.$beginLoading()
-    next()
-  } catch (e) {
-    next()
-  }
-})
-
-router.afterEach(() => {
-  try {
-    Vue.prototype.$endLoading()
   } catch (e) {}
-})
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresGuest) && store.state.user !== null) {
+  // Check if user is logged in
+  const loggedIn = store.state.isLoggedIn
+
+  // If user is logged in redirect to dashboard
+  if (to.matched.some((record) => record.meta.requiresGuest) && loggedIn) {
     next("/dashboard")
   } else {
     next()
@@ -191,7 +195,11 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth) && store.state.user === null) {
+  // Check if user is logged in
+  const loggedIn = store.state.isLoggedIn
+
+  // If user is not logged in redirect to home
+  if (to.matched.some((record) => record.meta.requiresAuth) && !loggedIn) {
     next("/")
   } else {
     next()
@@ -201,11 +209,11 @@ router.beforeEach((to, from, next) => {
 const defaultDocumentTitle = "YT Spammer Purge"
 
 router.afterEach((to) => {
-  if (to.meta && to.meta.title) {
-    document.title = `${to.meta.title} — ${defaultDocumentTitle}`
-  } else {
-    document.title = defaultDocumentTitle
-  }
+  try {
+    Vue.prototype.$endLoading()
+  } catch (e) {}
+
+  document.title = `${to.name ? to.name + " - " : ""}${defaultDocumentTitle}`
 })
 
 export default router

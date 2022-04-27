@@ -7,13 +7,13 @@
             <div class="card-content">
               <form>
                 <b-field label="Email">
-                  <b-input type="email" v-model="email"> </b-input>
+                  <b-input id="email" type="email" v-model="email"> </b-input>
                 </b-field>
                 <b-field label="Password">
-                  <b-input type="password" v-model="password" password-reveal> </b-input>
+                  <b-input id="password" type="password" v-model="password" password-reveal> </b-input>
                 </b-field>
                 <div class="is-flex is-justify-content-flex-end">
-                  <b-button type="is-primary" @click="emailSignin()">Login</b-button>
+                  <b-button id="loginbtn" type="is-primary" @click="emailSignin()">Login</b-button>
                 </div>
               </form>
             </div>
